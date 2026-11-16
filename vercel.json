@@ -1,1 +1,1 @@
-{"$schema":"https://openapi.vercel.sh/vercel.json","fluid":true,"regions":["gru1"],"functions":{"index.ts":{"maxDuration":60}}}
+{"$schema":"https://openapi.vercel.sh/vercel.json","fluid":true,"regions":["gru1"]}
