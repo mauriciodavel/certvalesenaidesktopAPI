@@ -1,0 +1,1 @@
+export function isAllowedOrigin(origin:string|undefined,configured:string[]){if(!origin)return true;if(configured.includes(origin))return true;return /^http:\/\/(127\.0\.0\.1|localhost)(:\d+)?$/.test(origin);}
