@@ -1,11 +1,43 @@
 {
   "name": "certifica-vale-api",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "type": "module",
-  "scripts": {"dev":"tsx watch server/local.ts","typecheck":"tsc --noEmit","test":"vitest run","db:init":"tsx server/scripts/init-db.ts"},
-  "engines": {"node":">=20"},
-  "dependencies": {"bcryptjs":"latest","compression":"latest","cors":"latest","dotenv":"latest","exceljs":"latest","express":"latest","express-rate-limit":"latest","helmet":"latest","jsonwebtoken":"latest","multer":"latest","mysql2":"latest","zod":"latest"},
-  "devDependencies": {"@types/compression":"latest","@types/cors":"latest","@types/express":"latest","@types/jsonwebtoken":"latest","@types/multer":"latest","@types/node":"latest","tsx":"latest","typescript":"latest","vitest":"latest"},
-  "overrides": {"uuid":"^11.1.1"}
+  "scripts": {
+    "dev": "tsx watch server/local.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "db:init": "tsx server/scripts/init-db.ts"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "bcryptjs": "latest",
+    "compression": "latest",
+    "cors": "latest",
+    "dotenv": "latest",
+    "exceljs": "latest",
+    "express": "latest",
+    "express-rate-limit": "latest",
+    "helmet": "latest",
+    "jsonwebtoken": "latest",
+    "multer": "latest",
+    "mysql2": "latest",
+    "zod": "latest"
+  },
+  "devDependencies": {
+    "@types/compression": "latest",
+    "@types/cors": "latest",
+    "@types/express": "latest",
+    "@types/jsonwebtoken": "latest",
+    "@types/multer": "latest",
+    "@types/node": "latest",
+    "tsx": "latest",
+    "typescript": "latest",
+    "vitest": "latest"
+  },
+  "overrides": {
+    "uuid": "^11.1.1"
+  }
 }

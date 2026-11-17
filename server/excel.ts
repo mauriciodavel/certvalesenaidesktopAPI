@@ -38,7 +38,7 @@ const normalizeHeader = (v: unknown) =>
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/\s+/g, " ")
     .toUpperCase();
-const dateOnly = (v: unknown) => {
+export const dateOnly = (v: unknown) => {
   if (v instanceof Date && !Number.isNaN(v.valueOf()))
     return v.toISOString().slice(0, 10);
   const text = clean(v);
@@ -48,6 +48,12 @@ const dateOnly = (v: unknown) => {
   return Number.isNaN(parsed.valueOf())
     ? null
     : parsed.toISOString().slice(0, 10);
+};
+export const percentage = (v: unknown, excelFraction = false) => {
+  const n = numeric(v);
+  if (n === null) return null;
+  const percentageValue = excelFraction && Math.abs(n) <= 1 ? n * 100 : n;
+  return Math.round((percentageValue + Number.EPSILON) * 100) / 100;
 };
 const numeric = (v: unknown) => {
   const n =
@@ -110,8 +116,7 @@ export async function parseWorkbook(buffer: Buffer, type: DatasetType) {
     headers.forEach((h, i) => (raw[h] = scalar(row.getCell(i + 1).value)));
     const objects: Record<string, number | null> = {};
     for (const [key, col] of Object.entries(objectCols)) {
-      const n = numeric(scalar(row.getCell(col).value));
-      objects[key] = n !== null && Math.abs(n) <= 1 ? n * 100 : n;
+      objects[key] = percentage(scalar(row.getCell(col).value), true);
     }
     candidates.push({
       candidateKey: `${matricula}::${prova}`.toLowerCase(),
@@ -160,12 +165,24 @@ export function compareCandidates(oldRows: Candidate[], nextRows: Candidate[]) {
       "dataAplicacao",
       "nota",
       "resultado",
-      "objects",
     ].filter(
       (f) =>
-        JSON.stringify(before[f as keyof Candidate]) !==
-        JSON.stringify(row[f as keyof Candidate]),
+        JSON.stringify(
+          f === "dataAplicacao"
+            ? dateOnly(before[f as keyof Candidate])
+            : before[f as keyof Candidate],
+        ) !==
+        JSON.stringify(
+          f === "dataAplicacao"
+            ? dateOnly(row[f as keyof Candidate])
+            : row[f as keyof Candidate],
+        ),
     );
+    const objectsChanged = Array.from({ length: 11 }, (_, index) => `O${index + 1}`).some(
+      (object) =>
+        percentage(before.objects?.[object]) !== percentage(row.objects?.[object]),
+    );
+    if (objectsChanged) fields.push("objects");
     fields.length ? changed.push({ key, nome: row.nome, fields }) : unchanged++;
   }
   for (const [key, row] of oldMap) if (!newMap.has(key)) removed.push(row);
